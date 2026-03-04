@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON VOSS — Clothing</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --ink: #1a1612;
+    --muted: #7a7268;
+    --accent: #c8a96e;
+    --accent-dark: #9e7d46;
+    --border: #e2ddd5;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Epilogue', sans-serif;
+    background: var(--warm-white);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--ink);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, width 0.3s, height 0.3s;
+    opacity: 0.5;
+  }
+  .cursor-ring.hovered { width: 56px; height: 56px; opacity: 0.8; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+    background: rgba(250, 248, 244, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, padding 0.3s;
+  }
+  nav.scrolled { border-color: var(--border); padding: 18px 60px; }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none; color: var(--ink);
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--muted); font-weight: 400;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px; background: var(--ink);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-actions { display: flex; gap: 20px; align-items: center; }
+  .nav-icon { background: none; border: none; cursor: none; color: var(--ink); opacity: 0.7; transition: opacity 0.2s; }
+  .nav-icon:hover { opacity: 1; }
+  .cart-btn {
+    font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    background: var(--ink); color: var(--warm-white);
+    border: none; cursor: none;
+    font-family: 'Epilogue', sans-serif;
+    transition: background 0.3s;
+  }
+  .cart-btn:hover { background: var(--accent-dark); }
+
+  /* Hero */
+  .hero {
+    height: 100vh; display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 120px 60px 80px;
+    background: var(--cream);
+    position: relative;
+  }
+  .hero-left::before {
+    content: 'SS26';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 200px; font-weight: 300;
+    color: rgba(26,22,18,0.04);
+    position: absolute; bottom: 40px; left: 20px;
+    line-height: 1; pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 88px);
+    font-weight: 300; line-height: 1.05;
+    margin-bottom: 28px;
+  }
+  .hero-title em { font-style: italic; color: var(--accent-dark); }
+  .hero-desc {
+    font-size: 14px; line-height: 1.8;
+    color: var(--muted); max-width: 360px;
+    margin-bottom: 44px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 16px;
+    text-decoration: none;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink);
+    font-weight: 500;
+    transition: gap 0.3s;
+  }
+  .hero-cta:hover { gap: 28px; }
+  .hero-cta-line { width: 40px; height: 1px; background: var(--ink); transition: width 0.3s; }
+  .hero-cta:hover .hero-cta-line { width: 56px; }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: #2c2420;
+  }
+  .hero-img-bg {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #3d3028 0%, #1a1210 60%, #0e0b09 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-model {
+    width: 100%; height: 100%;
+    background: 
+      radial-gradient(ellipse at 50% 30%, rgba(200,169,110,0.12) 0%, transparent 60%),
+      linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px; color: rgba(200,169,110,0.15);
+    letter-spacing: -0.05em;
+    font-weight: 300;
+  }
+  /* Decorative fashion figure */
+  .figure-art {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .figure-art .silhouette {
+    width: 180px; height: 360px;
+    margin: 0 auto 16px;
+    background: linear-gradient(180deg, rgba(200,169,110,0.5) 0%, rgba(200,169,110,0.2) 100%);
+    clip-path: polygon(38% 0%, 62% 0%, 68% 8%, 72% 22%, 78% 60%, 88% 100%, 12% 100%, 22% 60%, 28% 22%, 32% 8%);
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .figure-art .caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; letter-spacing: 0.3em;
+    color: rgba(200,169,110,0.6); text-transform: uppercase;
+  }
+
+  .hero-badge {
+    position: absolute; bottom: 48px; right: 48px;
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,169,110,0.4);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    line-height: 1.6; text-align: center;
+    animation: spin 20s linear infinite;
+  }
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  /* Marquee */
+  .marquee-bar {
+    background: var(--ink); color: var(--cream);
+    padding: 14px 0; overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 0;
+    animation: marquee 28s linear infinite;
+  }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .marquee-item {
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 0 40px;
+    opacity: 0.7;
+  }
+  .marquee-dot { color: var(--accent); opacity: 1 !important; font-size: 16px; }
+
+  /* Section common */
+  section { padding: 120px 60px; }
+  .section-label {
+    font-size: 10px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300; line-height: 1.1;
+  }
+
+  /* Collections */
+  .collections { background: var(--warm-white); }
+  .collections-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 64px;
+  }
+  .view-all {
+    font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; border-bottom: 1px solid var(--border);
+    padding-bottom: 4px; transition: color 0.2s, border-color 0.2s;
+  }
+  .view-all:hover { color: var(--ink); border-color: var(--ink); }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .product-card {
+    position: relative; overflow: hidden; background: var(--cream);
+    cursor: none;
+  }
+  .product-card:first-child { grid-row: span 2; }
+
+  .product-img {
+    width: 100%; aspect-ratio: 3/4;
+    overflow: hidden; position: relative;
+  }
+  .product-card:first-child .product-img { aspect-ratio: auto; height: 100%; min-height: 520px; }
+
+  .product-swatch {
+    width: 100%; height: 100%;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .product-card:hover .product-swatch { transform: scale(1.05); }
+
+  /* Product swatches with fashion-inspired gradients */
+  .swatch-1 { background: linear-gradient(135deg, #d4c5b0 0%, #b8a690 40%, #8c7a65 100%); }
+  .swatch-2 { background: linear-gradient(160deg, #2c3e50 0%, #34495e 50%, #1a252f 100%); }
+  .swatch-3 { background: linear-gradient(140deg, #c8a96e 0%, #a07840 60%, #7a5c2e 100%); }
+  .swatch-4 { background: linear-gradient(150deg, #e8e0d4 0%, #d4c8b8 50%, #b8a895 100%); }
+  .swatch-5 { background: linear-gradient(130deg, #3d2b1f 0%, #5c3d2e 50%, #2a1a10 100%); }
+
+  .product-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: flex-end;
+    padding: 28px;
+    background: linear-gradient(to top, rgba(26,22,18,0.7) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .product-card:hover .product-overlay { opacity: 1; }
+  .product-add {
+    font-size: 10px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--cream);
+    background: transparent; border: 1px solid rgba(255,255,255,0.4);
+    padding: 10px 20px; cursor: none;
+    font-family: 'Epilogue', sans-serif;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .product-add:hover { background: var(--accent); border-color: var(--accent); }
+
+  .product-info { padding: 20px 0 4px; }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .product-meta {
+    display: flex; justify-content: space-between;
+    align-items: center;
+  }
+  .product-category {
+    font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .product-price {
+    font-size: 14px; color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Fabric/editorial strip */
+  .editorial {
+    background: var(--ink); color: var(--cream);
+    display: grid; grid-template-columns: 1fr 1fr;
+    padding: 0; gap: 0;
+  }
+  .editorial-text {
+    padding: 100px 80px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .editorial-text .section-label { color: var(--accent); }
+  .editorial-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 4vw, 64px);
+    font-weight: 300; line-height: 1.08;
+    margin-bottom: 28px;
+  }
+  .editorial-title em { font-style: italic; color: var(--accent); }
+  .editorial-body {
+    font-size: 14px; line-height: 1.9;
+    color: rgba(245,240,232,0.6);
+    max-width: 420px; margin-bottom: 44px;
+  }
+  .editorial-btn {
+    display: inline-flex; align-items: center; gap: 16px;
+    text-decoration: none;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    font-weight: 400; transition: gap 0.3s;
+  }
+  .editorial-btn:hover { gap: 28px; }
+  .editorial-btn-line { width: 40px; height: 1px; background: var(--accent); transition: width 0.3s; }
+  .editorial-btn:hover .editorial-btn-line { width: 56px; }
+
+  .editorial-visual {
+    background: linear-gradient(160deg, #2c2420 0%, #1a1210 50%, #0e0b09 100%);
+    position: relative; overflow: hidden;
+    min-height: 520px;
+  }
+  .editorial-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      repeating-linear-gradient(45deg, rgba(200,169,110,0.04) 0px, rgba(200,169,110,0.04) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(-45deg, rgba(200,169,110,0.04) 0px, rgba(200,169,110,0.04) 1px, transparent 1px, transparent 40px);
+  }
+  .editorial-shapes {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px;
+  }
+  .e-shape {
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .e-shape:nth-child(1) { width: 160px; height: 160px; animation-delay: 0s; }
+  .e-shape:nth-child(2) { width: 280px; height: 280px; position: absolute; animation-delay: 1s; }
+  .e-shape:nth-child(3) { width: 400px; height: 400px; position: absolute; animation-delay: 2s; }
+  @keyframes pulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:0.7;transform:scale(1.05)} }
+  .e-center {
+    width: 80px; height: 80px;
+    background: var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--ink); position: absolute;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* Categories */
+  .categories { background: var(--cream); }
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 56px;
+  }
+  .cat-card {
+    position: relative; overflow: hidden; cursor: none;
+    height: 320px;
+  }
+  .cat-bg {
+    width: 100%; height: 100%;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .cat-card:hover .cat-bg { transform: scale(1.06); }
+  .cat-bg-1 { background: linear-gradient(160deg, #c5b8a8 0%, #a0907e 100%); }
+  .cat-bg-2 { background: linear-gradient(160deg, #1f2b38 0%, #0e1520 100%); }
+  .cat-bg-3 { background: linear-gradient(160deg, #b8935a 0%, #8c6832 100%); }
+
+  .cat-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 36px;
+    background: linear-gradient(to top, rgba(26,22,18,0.8) 0%, transparent 60%);
+  }
+  .cat-label {
+    font-size: 9px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .cat-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 300;
+    color: var(--cream); line-height: 1;
+    margin-bottom: 16px;
+  }
+  .cat-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(245,240,232,0.7);
+    text-decoration: none;
+    transform: translateY(8px); opacity: 0;
+    transition: transform 0.4s, opacity 0.4s;
+  }
+  .cat-card:hover .cat-link { transform: translateY(0); opacity: 1; }
+
+  /* Testimonials */
+  .testimonials { background: var(--warm-white); text-align: center; }
+  .testimonials .section-title { margin-bottom: 64px; }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+  }
+  .testimonial {
+    padding: 40px; border: 1px solid var(--border);
+    text-align: left; position: relative;
+  }
+  .testimonial::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; color: var(--accent); opacity: 0.4;
+    line-height: 0.8; position: absolute; top: 20px; left: 28px;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    line-height: 1.7; color: var(--ink);
+    margin-bottom: 24px; padding-top: 28px;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 14px; }
+  .author-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300; color: var(--cream);
+  }
+  .av-1 { background: var(--accent); }
+  .av-2 { background: #5c4a3a; }
+  .av-3 { background: #2c3e50; }
+  .author-name { font-size: 13px; font-weight: 500; }
+  .author-loc { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* Newsletter */
+  .newsletter {
+    background: var(--ink); color: var(--cream);
+    text-align: center; padding: 100px 60px;
+  }
+  .newsletter .section-label { color: var(--accent); }
+  .newsletter-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300; line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .newsletter-sub {
+    font-size: 14px; color: rgba(245,240,232,0.5);
+    margin-bottom: 44px;
+  }
+  .newsletter-form {
+    display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+  }
+  .newsletter-input {
+    flex: 1; padding: 14px 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-right: none;
+    color: var(--cream);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 13px; outline: none;
+  }
+  .newsletter-input::placeholder { color: rgba(245,240,232,0.3); }
+  .newsletter-input:focus { border-color: var(--accent); }
+  .newsletter-submit {
+    padding: 14px 32px;
+    background: var(--accent); color: var(--ink);
+    border: 1px solid var(--accent); cursor: none;
+    font-family: 'Epilogue', sans-serif;
+    font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    transition: background 0.3s;
+  }
+  .newsletter-submit:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+  /* Footer */
+  footer {
+    background: #100e0b; color: var(--cream);
+    padding: 80px 60px 40px;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; margin-bottom: 64px;
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: 20px; color: var(--cream); }
+  .footer-desc { font-size: 13px; line-height: 1.8; color: rgba(245,240,232,0.4); max-width: 280px; }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 12px; }
+  .footer-col a {
+    font-size: 13px; color: rgba(245,240,232,0.5);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--cream); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 12px; color: rgba(245,240,232,0.3); }
+  .footer-socials { display: flex; gap: 20px; }
+  .footer-socials a {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,240,232,0.4); font-size: 12px;
+    text-decoration: none; transition: border-color 0.2s, color 0.2s;
+  }
+  .footer-socials a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Entrance animations */
+  .fade-up {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 1100px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .product-card:first-child { grid-row: span 1; }
+    .editorial { grid-template-columns: 1fr; }
+    .editorial-visual { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    .hero-left { padding: 100px 24px 60px; }
+    .categories-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-input { border-right: 1px solid rgba(255,255,255,0.12); border-bottom: none; }
+    footer { padding: 60px 24px 32px; }
+    .footer-top { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Maison <span>Voss</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Women</a></li>
+    <li><a href="#">Men</a></li>
+    <li><a href="#">Collections</a></li>
+    <li><a href="#">Editorial</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-icon" title="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+    <button class="nav-icon" title="Wishlist">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="cart-btn">Bag (0)</button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow fade-up">Spring / Summer Collection 2026</p>
+    <h1 class="hero-title fade-up">Where Craft<br>Meets <em>Quiet</em><br>Elegance</h1>
+    <p class="hero-desc fade-up">Each piece is designed for the woman and man who understands that true style whispers. Refined silhouettes, natural fabrics, enduring form.</p>
+    <a href="#collections" class="hero-cta fade-up">
+      <span class="hero-cta-line"></span>
+      Explore the Collection
+    </a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-bg">
+      <div class="hero-model">
+        <div class="figure-art">
+          <div class="silhouette"></div>
+          <p class="caption">SS 26</p>
+        </div>
+      </div>
+    </div>
+    <div class="hero-badge">New<br>Season<br>Now</div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span class="marquee-item">Free shipping over ₹5,000</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">New arrivals every Friday</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Sustainably sourced fabrics</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Made to order available</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Free shipping over ₹5,000</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">New arrivals every Friday</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Sustainably sourced fabrics</span>
+    <span class="marquee-item marquee-dot">◆</span>
+    <span class="marquee-item">Made to order available</span>
+    <span class="marquee-item marquee-dot">◆</span>
+  </div>
+</div>
+
+<!-- Collections -->
+<section class="collections" id="collections">
+  <div class="collections-header fade-up">
+    <div>
+      <p class="section-label">New Arrivals</p>
+      <h2 class="section-title">The Season's Edit</h2>
+    </div>
+    <a href="#" class="view-all">View All Pieces</a>
+  </div>
+
+  <div class="products-grid fade-up">
+    <!-- Card 1 (large) -->
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-swatch swatch-1" style="height:100%"></div>
+        <div class="product-overlay">
+          <button class="product-add">Add to Bag</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-name">Relaxed Linen Blazer</p>
+        <div class="product-meta">
+          <span class="product-category">Outerwear</span>
+          <span class="product-price">₹8,900</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-swatch swatch-2"></div>
+        <div class="product-overlay">
+          <button class="product-add">Add to Bag</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-name">Midnight Crepe Dress</p>
+        <div class="product-meta">
+          <span class="product-category">Dresses</span>
+          <span class="product-price">₹12,400</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-swatch swatch-3"></div>
+        <div class="product-overlay">
+          <button class="product-add">Add to Bag</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-name">Camel Knit Cardigan</p>
+        <div class="product-meta">
+          <span class="product-category">Knitwear</span>
+          <span class="product-price">₹6,200</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-swatch swatch-4"></div>
+        <div class="product-overlay">
+          <button class="product-add">Add to Bag</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-name">Ecru Wide Trousers</p>
+        <div class="product-meta">
+          <span class="product-category">Trousers</span>
+          <span class="product-price">₹5,800</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-swatch swatch-5"></div>
+        <div class="product-overlay">
+          <button class="product-add">Add to Bag</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <p class="product-name">Espresso Wool Coat</p>
+        <div class="product-meta">
+          <span class="product-category">Outerwear</span>
+          <span class="product-price">₹18,500</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Editorial -->
+<div class="editorial fade-up">
+  <div class="editorial-text">
+    <p class="section-label">The Maison Story</p>
+    <h2 class="editorial-title">Fabric is<br><em>Philosophy</em></h2>
+    <p class="editorial-body">Every thread we source tells a story of intention. From the looms of Tamil Nadu to the highlands of Scotland, we select only materials that age with grace and wear with integrity. Slow fashion, lasting form.</p>
+    <a href="#" class="editorial-btn">
+      <span class="editorial-btn-line"></span>
+      Read Our Story
+    </a>
+  </div>
+  <div class="editorial-visual">
+    <div class="editorial-pattern"></div>
+    <div class="editorial-shapes">
+      <div class="e-shape"></div>
+      <div class="e-shape"></div>
+      <div class="e-shape"></div>
+      <div class="e-center">M</div>
+    </div>
+  </div>
+</div>
+
+<!-- Categories -->
+<section class="categories">
+  <div class="fade-up">
+    <p class="section-label">Browse by Category</p>
+    <h2 class="section-title">Shop the Range</h2>
+  </div>
+  <div class="categories-grid fade-up">
+    <div class="cat-card">
+      <div class="cat-bg cat-bg-1"></div>
+      <div class="cat-content">
+        <p class="cat-label">For Her</p>
+        <h3 class="cat-name">Women's</h3>
+        <a href="#" class="cat-link">Explore →</a>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-bg cat-bg-2"></div>
+      <div class="cat-content">
+        <p class="cat-label">For Him</p>
+        <h3 class="cat-name">Men's</h3>
+        <a href="#" class="cat-link">Explore →</a>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-bg cat-bg-3"></div>
+      <div class="cat-content">
+        <p class="cat-label">Curated</p>
+        <h3 class="cat-name">Accessories</h3>
+        <a href="#" class="cat-link">Explore →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <p class="section-label fade-up">What Our Clients Say</p>
+  <h2 class="section-title fade-up">Worn With Love</h2>
+  <div class="testimonials-grid fade-up">
+    <div class="testimonial">
+      <p class="testimonial-text">The linen blazer I ordered has become my most-reached-for piece. The weight, the drape — it feels like it was cut just for me.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar av-1">A</div>
+        <div>
+          <p class="author-name">Ananya Krishnan</p>
+          <p class="author-loc">Chennai, India</p>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">I've never experienced packaging this thoughtful. Before I'd even tried the coat on, I knew I'd made the right choice.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar av-2">R</div>
+        <div>
+          <p class="author-name">Rohan Mehta</p>
+          <p class="author-loc">Mumbai, India</p>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <p class="testimonial-text">Maison Voss understands that luxury is restraint, not excess. Their dresses have replaced half my wardrobe.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar av-3">P</div>
+        <div>
+          <p class="author-name">Priya Nair</p>
+          <p class="author-loc">Bengaluru, India</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<div class="newsletter fade-up">
+  <p class="section-label">Join the Circle</p>
+  <h2 class="newsletter-title">First to Know,<br>First to Wear</h2>
+  <p class="newsletter-sub">New collections, editorial features, and exclusive offers — for those who know.</p>
+  <div class="newsletter-form">
+    <input class="newsletter-input" type="email" placeholder="Your email address">
+    <button class="newsletter-submit">Subscribe</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Maison <span style="color:var(--accent)">Voss</span></a>
+      <p class="footer-desc">Crafted clothing for people who believe that how you dress is how you think. Slow fashion, lasting form, enduring quality.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">Women's</a></li>
+        <li><a href="#">Men's</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Sale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>About</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">Care Guide</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Maison Voss. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">ig</a>
+      <a href="#">pin</a>
+      <a href="#">tw</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 60);
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Fade-up on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
