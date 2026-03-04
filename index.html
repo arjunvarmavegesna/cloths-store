@@ -159,40 +159,16 @@
   }
   .hero-img-bg {
     width: 100%; height: 100%;
-    background: linear-gradient(160deg, #3d3028 0%, #1a1210 60%, #0e0b09 100%);
-    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
-  .hero-model {
+  .hero-img-bg img {
     width: 100%; height: 100%;
-    background: 
-      radial-gradient(ellipse at 50% 30%, rgba(200,169,110,0.12) 0%, transparent 60%),
-      linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 120px; color: rgba(200,169,110,0.15);
-    letter-spacing: -0.05em;
-    font-weight: 300;
+    object-fit: cover; object-position: center top;
+    transition: transform 8s ease;
   }
-  /* Decorative fashion figure */
-  .figure-art {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  }
-  .figure-art .silhouette {
-    width: 180px; height: 360px;
-    margin: 0 auto 16px;
-    background: linear-gradient(180deg, rgba(200,169,110,0.5) 0%, rgba(200,169,110,0.2) 100%);
-    clip-path: polygon(38% 0%, 62% 0%, 68% 8%, 72% 22%, 78% 60%, 88% 100%, 12% 100%, 22% 60%, 28% 22%, 32% 8%);
-    animation: float 6s ease-in-out infinite;
-  }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-  .figure-art .caption {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px; letter-spacing: 0.3em;
-    color: rgba(200,169,110,0.6); text-transform: uppercase;
-  }
+  .hero-img-bg:hover img { transform: scale(1.04); }
+  .hero-model { display: none; }
+  .figure-art { display: none; }
 
   .hero-badge {
     position: absolute; bottom: 48px; right: 48px;
@@ -271,18 +247,13 @@
   }
   .product-card:first-child .product-img { aspect-ratio: auto; height: 100%; min-height: 520px; }
 
-  .product-swatch {
+  .product-img img {
     width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
   }
-  .product-card:hover .product-swatch { transform: scale(1.05); }
-
-  /* Product swatches with fashion-inspired gradients */
-  .swatch-1 { background: linear-gradient(135deg, #d4c5b0 0%, #b8a690 40%, #8c7a65 100%); }
-  .swatch-2 { background: linear-gradient(160deg, #2c3e50 0%, #34495e 50%, #1a252f 100%); }
-  .swatch-3 { background: linear-gradient(140deg, #c8a96e 0%, #a07840 60%, #7a5c2e 100%); }
-  .swatch-4 { background: linear-gradient(150deg, #e8e0d4 0%, #d4c8b8 50%, #b8a895 100%); }
-  .swatch-5 { background: linear-gradient(130deg, #3d2b1f 0%, #5c3d2e 50%, #2a1a10 100%); }
+  .product-card:hover .product-img img { transform: scale(1.05); }
 
   .product-overlay {
     position: absolute; inset: 0;
@@ -403,12 +374,11 @@
   }
   .cat-bg {
     width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
   }
   .cat-card:hover .cat-bg { transform: scale(1.06); }
-  .cat-bg-1 { background: linear-gradient(160deg, #c5b8a8 0%, #a0907e 100%); }
-  .cat-bg-2 { background: linear-gradient(160deg, #1f2b38 0%, #0e1520 100%); }
-  .cat-bg-3 { background: linear-gradient(160deg, #b8935a 0%, #8c6832 100%); }
 
   .cat-content {
     position: absolute; bottom: 0; left: 0; right: 0;
@@ -622,12 +592,7 @@
   </div>
   <div class="hero-right">
     <div class="hero-img-bg">
-      <div class="hero-model">
-        <div class="figure-art">
-          <div class="silhouette"></div>
-          <p class="caption">SS 26</p>
-        </div>
-      </div>
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80" alt="Spring Summer Collection 2026">
     </div>
     <div class="hero-badge">New<br>Season<br>Now</div>
   </div>
@@ -669,7 +634,7 @@
     <!-- Card 1 (large) -->
     <div class="product-card">
       <div class="product-img">
-        <div class="product-swatch swatch-1" style="height:100%"></div>
+        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4b984b?w=700&q=80" alt="Relaxed Linen Blazer">
         <div class="product-overlay">
           <button class="product-add">Add to Bag</button>
         </div>
@@ -686,7 +651,7 @@
     <!-- Card 2 -->
     <div class="product-card">
       <div class="product-img">
-        <div class="product-swatch swatch-2"></div>
+        <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=600&q=80" alt="Midnight Crepe Dress">
         <div class="product-overlay">
           <button class="product-add">Add to Bag</button>
         </div>
@@ -703,7 +668,7 @@
     <!-- Card 3 -->
     <div class="product-card">
       <div class="product-img">
-        <div class="product-swatch swatch-3"></div>
+        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80" alt="Camel Knit Cardigan">
         <div class="product-overlay">
           <button class="product-add">Add to Bag</button>
         </div>
@@ -720,7 +685,7 @@
     <!-- Card 4 -->
     <div class="product-card">
       <div class="product-img">
-        <div class="product-swatch swatch-4"></div>
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80" alt="Ecru Wide Trousers">
         <div class="product-overlay">
           <button class="product-add">Add to Bag</button>
         </div>
@@ -737,7 +702,7 @@
     <!-- Card 5 -->
     <div class="product-card">
       <div class="product-img">
-        <div class="product-swatch swatch-5"></div>
+        <img src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&q=80" alt="Espresso Wool Coat">
         <div class="product-overlay">
           <button class="product-add">Add to Bag</button>
         </div>
@@ -783,7 +748,7 @@
   </div>
   <div class="categories-grid fade-up">
     <div class="cat-card">
-      <div class="cat-bg cat-bg-1"></div>
+      <img class="cat-bg" src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=800&q=80" alt="Women's Collection">
       <div class="cat-content">
         <p class="cat-label">For Her</p>
         <h3 class="cat-name">Women's</h3>
@@ -791,7 +756,7 @@
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-2"></div>
+      <img class="cat-bg" src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=800&q=80" alt="Men's Collection">
       <div class="cat-content">
         <p class="cat-label">For Him</p>
         <h3 class="cat-name">Men's</h3>
@@ -799,7 +764,7 @@
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-3"></div>
+      <img class="cat-bg" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80" alt="Accessories">
       <div class="cat-content">
         <p class="cat-label">Curated</p>
         <h3 class="cat-name">Accessories</h3>
